@@ -14,7 +14,7 @@ st.header("🙋🏻‍♀️ User Credentials")
 merchant_id = st.text_input("Merchant ID") 
 api_key = st.text_input("API Key", type="password")  
 st.markdown("---")
-### User creds from Moneris Access and Credentials End
+### End of User creds from Moneris Access and Credentials
 
 
 ### Payment Details Section Start
@@ -30,7 +30,7 @@ with col2:
     idempotency_key = st.text_input("Idempotency Key", value=str(uuid.uuid4())) # Version 4 as encouraged by Moneris
     # A new idempotency key is generated each time the form is modified
 st.markdown("---")
-### Payment Details Section End
+### End of Payment Details Section
 
 
 ### Credit Card Details Section Start
@@ -46,12 +46,12 @@ with col2:
         expiry_year = st.selectbox("Expiry Year", options=list(range(2024, 2078)), index=1)
     cvv = st.text_input("CVV", value="123", max_chars=3)
 st.markdown("---")
-### Credit Card Details Section End
+### End of Credit Card Details Section 
 
 
 
-### Main button action to create the payment
-if st.button("💳 Create Purchase", type="primary"):
+### Main button action to create the payment request
+if st.button("💳 Create Payment", type="primary"):
 
     # Check if credentials were inputted
     if not merchant_id or not api_key:
@@ -61,23 +61,18 @@ if st.button("💳 Create Purchase", type="primary"):
         # Assembling the request body from the form inputs
         request_body = {
             "idempotencyKey": idempotency_key,
-            
-            # Value must be converted into cents
-            "amount": {"amount": int(amount * 100), "currency": currency},
-
-            # Hardcoded regularPurchaseWithCardPaymentMethod as required 
-            "paymentMethod": {
+            "amount": {"amount": int(amount * 100), "currency": currency}, # Value must be converted into cents
+            "paymentMethod": { # Hardcoded regularPurchaseWithCardPaymentMethod as required 
                 "paymentMethodSource": "CARD",
-                "card": {
-                    # Card details from form
+                "card": { # Card details from form
                     "cardNumber": card_number.replace(" ", ""),  # remove whitespace
                     "expiryMonth": expiry_month,
                     "expiryYear": expiry_year,              
                     "cardSecurityCode": cvv
                 }
             }
-
         }
+
         # Assembling HTTP request headers including credentials
         request_headers = {
             "Content-Type": "application/json",  # JSON data will be sent 
@@ -121,8 +116,9 @@ if st.button("💳 Create Purchase", type="primary"):
                     st.text(response.text)
         except Exception as e:
             st.error(f"❌ Error: {str(e)}")
-
 st.markdown("---")
+### End of main button action to create the payment request
+
 # Response code legend
 with st.expander("📖 Response Codes Legend", expanded=False):
     st.markdown(
