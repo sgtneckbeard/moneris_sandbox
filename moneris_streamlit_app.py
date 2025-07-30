@@ -6,7 +6,7 @@ import uuid            # To generate unique values for idempotency keys as encou
 # Configure the web page title and icon
 st.set_page_config(page_title="Moneris Sandbox", page_icon="💳")
 
-st.title("💳 Moneris Sandbox")
+st.title("Moneris Sandbox")
 st.markdown("---")
 
 ### User creds from Moneris Access and Credentials Start
@@ -77,7 +77,7 @@ if st.button("💳 Create Purchase", type="primary"):
                 }
             }
         }
-        
+        st.markdown("---")
         # Assembling HTTP request headers including credentials
         request_headers = {
             "Content-Type": "application/json",  # Required: tells server we're sending JSON
@@ -89,7 +89,7 @@ if st.button("💳 Create Purchase", type="primary"):
         # Print of headers to be sent
         print_headers = request_headers.copy()
         print_headers["X-API-Key"] = "[HIDDEN]"
-        with st.expander("🔍 View Request Headers"):
+        with st.expander("🔍 View Request Headers", expanded=True):
             st.json(print_headers)
 
         # Print of payload body to be sent
