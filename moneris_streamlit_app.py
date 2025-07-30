@@ -76,13 +76,14 @@ if st.button("💳 Create Purchase", type="primary"):
                     "cardSecurityCode": cvv
                 }
             }
+
         }
         # Assembling HTTP request headers including credentials
         request_headers = {
-            "Content-Type": "application/json", 
-            "X-API-Key": api_key,
-            "Api-Version": "2024-09-17", # Default and latest stable version
-            "X-Merchant-Id": merchant_id
+            "Content-Type": "application/json",  # JSON data will be sent 
+            "Api-Version": "2024-09-17", # default and latest stable version
+            "X-Merchant-Id": merchant_id,
+            "X-API-Key": api_key
         }
 
         st.markdown("---")
@@ -99,16 +100,16 @@ if st.button("💳 Create Purchase", type="primary"):
         
         try: # Send the final assembled payment request to Moneris sandbox endpoint
             response = requests.post(
-                "https://api.sb.moneris.io/payments",  # Sandbox server URL for create payments
+                "https://api.sb.moneris.io/payments",  # Sandbox Server URL resource for create payments
                 headers=request_headers,                
-                data=json.dumps(request_body),          # Convert Python dict to JSON
+                data=json.dumps(request_body),          # Convert the Python dict to JSON
                 timeout=30
             )
             
             # If response status code is 201, payment was created successfully
             if response.status_code == 201:
                 st.success("✅ Payment Created. Response below:")
-            else: # otherwise, show status code and error message
+            else: # otherwise, show status code and error
                 st.error(f"❌ Failed: HTTP {response.status_code}")
             
             with st.expander("📄 Server Response", expanded=True):
@@ -120,7 +121,6 @@ if st.button("💳 Create Purchase", type="primary"):
                     st.text(response.text)
         except Exception as e:
             st.error(f"❌ Error: {str(e)}")
-
 
 st.markdown("---")
 # Response code legend
